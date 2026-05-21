@@ -12,7 +12,7 @@ The installer downloads and sets up several tools.
 
 Steps:
 
-1. Download `knight-lab-launch.zip` and unzip
+1. Download files in this repo (students would get a zipped folder)
 2. Right-click `install-mac.command` and choose **Open**. Right-clicking triggers the confirmation 
    from macOS to run unsigned scripts.
 3. When macOS asks whether you're sure, click **Open** again.
