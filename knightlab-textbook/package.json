@@ -1,0 +1,27 @@
+{
+  "name": "knightlab-textbook",
+  "displayName": "Knight Lab Textbook",
+  "description": "Interactive course textbook",
+  "version": "0.0.1",
+  "publisher": "knight-lab",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "extensionKind": ["ui"],
+  "activationEvents": [
+    "onStartupFinished",
+    "workspaceContains:.devcontainer/devcontainer.json"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "knightlab.openTextbook",
+        "title": "Knight Lab: Open Textbook"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+services:
+  dataviz:
+    build: .
+    image: dataviz-starter:latest
+    container_name: dataviz
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./student_work:/home/student/student_work
+      
