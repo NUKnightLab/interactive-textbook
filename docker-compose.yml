@@ -1,0 +1,7 @@
+services:
+  course:
+    build: .
+    image: knightlab-course:latest
+    container_name: knightlab-course
+    volumes:
+      - ./student_work:/home/student/student_work

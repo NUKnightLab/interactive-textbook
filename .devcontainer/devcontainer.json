@@ -1,0 +1,39 @@
+{
+  "name": "knightlab-course",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "course",
+  "workspaceFolder": "/home/student",
+  "remoteUser": "student",
+  "updateRemoteUserUID": true,
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "ms-toolsai.jupyter",
+        "charliermarsh.ruff",
+        "dbaeumer.vscode-eslint",
+        "REditorSupport.r",
+        "formulahendry.code-runner"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": false,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/.*": true
+        },
+        "code-runner.runInTerminal": true,
+        "code-runner.clearPreviousOutput": true,
+        "code-runner.saveFileBeforeRun": true,
+        "code-runner.executorMap": {
+          "r": "Rscript",
+          "javascript": "node"
+        }
+      }
+    }
+  }
+}
