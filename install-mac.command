@@ -91,12 +91,15 @@ if [[ -d "$COURSE_DIR" ]]; then
 
   # Connect the course folder to the update source (one-time)
   if [[ ! -d "$COURSE_DIR/.git" ]]; then
-    echo "Connecting textbook for future updates..."
-    git -C "$COURSE_DIR" init -b main
-    git -C "$COURSE_DIR" remote add origin https://github.com/NUKnightLab/interactive-textbook.git
-    git -C "$COURSE_DIR" fetch origin course-content:main --depth=1 --quiet
-    git -C "$COURSE_DIR" reset --hard main
-    echo "Textbook connected."
+    PARENT_GIT=$(git -C "$COURSE_DIR" rev-parse --show-toplevel 2>/dev/null)
+    if [[ -z "$PARENT_GIT" ]]; then
+      echo "Connecting textbook for future updates..."
+      git -C "$COURSE_DIR" init -b main
+      git -C "$COURSE_DIR" remote add origin https://github.com/NUKnightLab/interactive-textbook.git
+      git -C "$COURSE_DIR" fetch origin course-content --depth=1 --quiet
+      git -C "$COURSE_DIR" reset --hard origin/course-content
+      echo "Textbook connected."
+    fi
   fi
 else
   echo ""

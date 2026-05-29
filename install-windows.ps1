@@ -146,12 +146,15 @@ if (Test-Path $CourseDir) {
 
     # Connect the course folder to the update source (one-time)
     if (-not (Test-Path (Join-Path $CourseDir ".git"))) {
-        Write-Host "Connecting textbook for future updates..."
-        git -C $CourseDir init -b main
-        git -C $CourseDir remote add origin https://github.com/NUKnightLab/interactive-textbook.git
-        git -C $CourseDir fetch origin course-content:main --depth=1 --quiet
-        git -C $CourseDir reset --hard main
-        Write-Host "Textbook connected."
+        $ParentGit = git -C $CourseDir rev-parse --show-toplevel 2>$null
+        if (-not $ParentGit) {
+            Write-Host "Connecting textbook for future updates..."
+            git -C $CourseDir init -b main
+            git -C $CourseDir remote add origin https://github.com/NUKnightLab/interactive-textbook.git
+            git -C $CourseDir fetch origin course-content --depth=1 --quiet
+            git -C $CourseDir reset --hard origin/course-content
+            Write-Host "Textbook connected."
+        }
     }
 } else {
     Write-Host ""
