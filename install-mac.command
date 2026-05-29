@@ -57,26 +57,7 @@ else
   echo "[3/5] VS Code already installed."
 fi
 
-# dev containers extension (uses VSCode's bundled CLI directly)
 CODE_CLI="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
-echo "[4/5] Installing Dev Containers extension..."
-if ! "$CODE_CLI" --install-extension ms-vscode-remote.remote-containers --force; then
-  echo "WARNING: Could not install the Dev Containers extension automatically."
-  echo "Install it later from VS Code: open the Extensions panel and search 'Dev Containers'."
-fi
-
-# Knight Lab Textbook extension (the VSIX bundled with this install script)
-if [[ -f "$TEXTBOOK_VSIX" ]]; then
-  echo "[5/5] Installing Knight Lab Textbook extension..."
-  if ! "$CODE_CLI" --install-extension "$TEXTBOOK_VSIX" --force; then
-    echo "WARNING: Could not install the Knight Lab Textbook extension automatically."
-    echo "Install it later from VS Code: Extensions panel, '...' menu, Install from VSIX."
-  fi
-else
-  echo "[5/5] Knight Lab Textbook VSIX not found at $TEXTBOOK_VSIX — skipping."
-  echo "Place knightlab-textbook-0.0.1.vsix next to this script and re-run."
-fi
-
 
 # launch docker desktop (first launch needs user approval -privileged helper install, license accept)
 echo "Launching Docker Desktop..."
@@ -107,10 +88,39 @@ if [[ -d "$COURSE_DIR" ]]; then
   cd "$COURSE_DIR"
   docker compose build
   echo "Image built and cached."
+
+  # Connect the course folder to the update source (one-time)
+  if [[ ! -d "$COURSE_DIR/.git" ]]; then
+    echo "Connecting textbook for future updates..."
+    git -C "$COURSE_DIR" init -b main
+    git -C "$COURSE_DIR" remote add origin https://github.com/NUKnightLab/interactive-textbook.git
+    git -C "$COURSE_DIR" fetch origin course-content:main --depth=1 --quiet
+    git -C "$COURSE_DIR" reset --hard main
+    echo "Textbook connected."
+  fi
 else
   echo ""
   echo "(Course folder not found at $COURSE_DIR — skipping image pre-build.)"
   echo "Place the knightlab-course folder there and re-run to pre-build."
+fi
+
+# dev containers extension (uses VSCode's bundled CLI directly)
+echo "[4/5] Installing Dev Containers extension..."
+if ! "$CODE_CLI" --install-extension ms-vscode-remote.remote-containers --force; then
+  echo "WARNING: Could not install the Dev Containers extension automatically."
+  echo "Install it later from VS Code: open the Extensions panel and search 'Dev Containers'."
+fi
+
+# Knight Lab Textbook extension (the VSIX bundled with this install script)
+if [[ -f "$TEXTBOOK_VSIX" ]]; then
+  echo "[5/5] Installing Knight Lab Textbook extension..."
+  if ! "$CODE_CLI" --install-extension "$TEXTBOOK_VSIX" --force; then
+    echo "WARNING: Could not install the Knight Lab Textbook extension automatically."
+    echo "Install it later from VS Code: Extensions panel, '...' menu, Install from VSIX."
+  fi
+else
+  echo "[5/5] Knight Lab Textbook VSIX not found at $TEXTBOOK_VSIX — skipping."
+  echo "Place knightlab-textbook-0.0.1.vsix next to this script and re-run."
 fi
 
 # Auto-launch VS Code with the course folder. The textbook extension

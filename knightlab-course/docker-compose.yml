@@ -4,4 +4,5 @@ services:
     image: knightlab-course:latest
     container_name: knightlab-course
     volumes:
+      - ./chapters:/home/student/chapters
       - ./student_work:/home/student/student_work
