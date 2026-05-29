@@ -13,14 +13,19 @@
   "main": "./extension.js",
   "extensionKind": ["ui"],
   "activationEvents": [
-    "onStartupFinished",
-    "workspaceContains:.devcontainer/devcontainer.json"
+    "workspaceContains:chapters/**",
+    "onCommand:knightlab.openTextbook",
+    "onCommand:knightlab.updateTextbook"
   ],
   "contributes": {
     "commands": [
       {
         "command": "knightlab.openTextbook",
         "title": "Knight Lab: Open Textbook"
+      },
+      {
+        "command": "knightlab.updateTextbook",
+        "title": "Knight Lab: Update Textbook"
       }
     ]
   }
