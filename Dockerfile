@@ -35,9 +35,8 @@ ENV NODE_PATH=/usr/lib/node_modules
 COPY requirements-r.R /tmp/requirements-r.R
 RUN Rscript /tmp/requirements-r.R
 
-# course content owned by student
+# datasets baked into image; chapters are bind-mounted at runtime for live updates
 COPY --chown=$USERNAME:$USERNAME datasets/  /home/$USERNAME/datasets/
-COPY --chown=$USERNAME:$USERNAME chapters/  /home/$USERNAME/chapters/
 
 # workspace settings do not to show the Welcome page on startup (also from settings file)
 COPY --chown=$USERNAME:$USERNAME .vscode/   /home/$USERNAME/.vscode/
