@@ -26,7 +26,7 @@ Click any chapter to begin. The lesson appears on the left, the starter code on 
 ## Getting started (Windows)
 
 The installer downloads and sets up several tools.
-- winget (Windows Package Manager — built into Windows 10/11)
+- winget (Windows Package Manager, should be built-in for Windows 10/11)
 - Docker Desktop
 - VS Code + extensions
 - Course environment (Docker image)
