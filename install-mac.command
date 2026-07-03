@@ -91,7 +91,10 @@ if [[ -d "$COURSE_DIR" ]]; then
 
   # Connect the course folder to the update source (one-time)
   if [[ ! -d "$COURSE_DIR/.git" ]]; then
-    PARENT_GIT=$(git -C "$COURSE_DIR" rev-parse --show-toplevel 2>/dev/null)
+    # `|| true` matters: with set -e, a failing command substitution in an
+    # assignment kills the whole script — and rev-parse *always* fails when the
+    # course folder has no parent repo (the normal student/zip case).
+    PARENT_GIT=$(git -C "$COURSE_DIR" rev-parse --show-toplevel 2>/dev/null || true)
     if [[ -z "$PARENT_GIT" ]]; then
       echo "Connecting textbook for future updates..."
       git -C "$COURSE_DIR" init -b main

@@ -1,3 +1,6 @@
 {
-  "workbench.startupEditor": "none"
+  "workbench.startupEditor": "none",
+  "files.readonlyInclude": {
+    "**/chapters/**/lesson.html": true
+  }
 }

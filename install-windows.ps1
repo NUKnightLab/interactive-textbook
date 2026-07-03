@@ -34,21 +34,34 @@ function Get-CodeCli {
     return $null
 }
 
-# [1/5] winget (Windows Package Manager — built into Windows 10 1709+ and Windows 11)
+# [1/6] winget (Windows Package Manager — built into Windows 10 1709+ and Windows 11)
 if (-not (Get-Command "winget" -ErrorAction SilentlyContinue)) {
-    Write-Host "[1/5] winget not found. Opening Microsoft Store to install it..."
+    Write-Host "[1/6] winget not found. Opening Microsoft Store to install it..."
     Start-Process "ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1"
     Write-Host "Install 'App Installer' from the Store window that just opened, then re-run this script."
     Read-Host "Press Enter to exit"
     exit 1
 } else {
-    Write-Host "[1/5] winget already available."
+    Write-Host "[1/6] winget already available."
 }
 
-# [2/5] Docker Desktop
+# [2/6] Git (required to connect the textbook to its update source)
+if (-not (Get-Command "git" -ErrorAction SilentlyContinue)) {
+    Write-Host "[2/6] Installing Git..."
+    winget install --id Git.Git --accept-package-agreements --accept-source-agreements --silent
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "WARNING: Git installation may have failed."
+        Write-Host "Install it manually from https://git-scm.com/download/win, then re-run."
+    }
+    Update-SessionPath
+} else {
+    Write-Host "[2/6] Git already installed."
+}
+
+# [3/6] Docker Desktop
 $DockerExe = Join-Path $env:ProgramFiles "Docker\Docker\Docker Desktop.exe"
 if (-not (Test-Path $DockerExe)) {
-    Write-Host "[2/5] Installing Docker Desktop..."
+    Write-Host "[3/6] Installing Docker Desktop..."
     winget install --id Docker.DockerDesktop --accept-package-agreements --accept-source-agreements --silent
     if ($LASTEXITCODE -ne 0) {
         Write-Host "WARNING: Docker Desktop installation may have failed."
@@ -56,13 +69,13 @@ if (-not (Test-Path $DockerExe)) {
     }
     Update-SessionPath
 } else {
-    Write-Host "[2/5] Docker Desktop already installed."
+    Write-Host "[3/6] Docker Desktop already installed."
 }
 
-# [3/5] VS Code
+# [4/6] VS Code
 $VsCodeExe = Join-Path $env:LOCALAPPDATA "Programs\Microsoft VS Code\Code.exe"
 if (-not (Test-Path $VsCodeExe)) {
-    Write-Host "[3/5] Installing VS Code..."
+    Write-Host "[4/6] Installing VS Code..."
     winget install --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements --silent
     if ($LASTEXITCODE -ne 0) {
         Write-Host "WARNING: VS Code installation may have failed."
@@ -70,7 +83,7 @@ if (-not (Test-Path $VsCodeExe)) {
     }
     Update-SessionPath
 } else {
-    Write-Host "[3/5] VS Code already installed."
+    Write-Host "[4/6] VS Code already installed."
 }
 
 $CodeCli = Get-CodeCli
@@ -82,24 +95,24 @@ if (-not $CodeCli) {
     exit 1
 }
 
-# [4/5] Dev Containers extension
-Write-Host "[4/5] Installing Dev Containers extension..."
+# [5/6] Dev Containers extension
+Write-Host "[5/6] Installing Dev Containers extension..."
 & $CodeCli --install-extension ms-vscode-remote.remote-containers --force
 if ($LASTEXITCODE -ne 0) {
     Write-Host "WARNING: Could not install the Dev Containers extension automatically."
     Write-Host "Install it later from VS Code: open the Extensions panel and search 'Dev Containers'."
 }
 
-# [5/5] Knight Lab Textbook extension (the VSIX bundled with this install script)
+# [6/6] Knight Lab Textbook extension (the VSIX bundled with this install script)
 if ($TextbookVsix) {
-    Write-Host "[5/5] Installing Knight Lab Textbook extension..."
+    Write-Host "[6/6] Installing Knight Lab Textbook extension..."
     & $CodeCli --install-extension $TextbookVsix --force
     if ($LASTEXITCODE -ne 0) {
         Write-Host "WARNING: Could not install the Knight Lab Textbook extension automatically."
         Write-Host "Install it later from VS Code: Extensions panel, '...' menu, Install from VSIX."
     }
 } else {
-    Write-Host "[5/5] Knight Lab Textbook VSIX not found — skipping."
+    Write-Host "[6/6] Knight Lab Textbook VSIX not found — skipping."
     Write-Host "Place knightlab-textbook-0.0.1.vsix next to this script and re-run."
 }
 
